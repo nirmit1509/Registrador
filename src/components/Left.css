@@ -27,7 +27,6 @@
     padding-left: 10px;
     color: rgb(58, 66, 182);
     font-size: 23px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .left__middle {
@@ -48,11 +47,10 @@
     color: rgba(255, 255, 255, 0.555);
     padding: 10px;
     font-size: 18px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: pointer;
 }
 
-.left__middle > ul :hover {
+.left__middle > ul :hover, .left__bottom > ul :hover {
     color: white;
 }
 
@@ -63,16 +61,17 @@
 }
 
 .left__bottom > ul {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    color: rgba(255, 255, 255, 0.8);
     margin-left: 20px;
     padding-bottom: 10px;
+    align-items: center;
 }
 
 .left__bottom > ul > li {
-    color: rgba(255, 255, 255);
     padding: 10px;
     font-size: 16px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
     cursor: pointer;
 }
 

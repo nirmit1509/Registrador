@@ -3,6 +3,7 @@
     place-items: center;
     background-color: #faa490;
     height: 100vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .app__body {

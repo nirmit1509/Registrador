@@ -1,5 +1,6 @@
 import React from 'react';
 import './Left.css';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import logo from '../logo.png';
 
 function Left() {
@@ -22,7 +23,7 @@ function Left() {
             </div>
             <div className="left__bottom">
                 <ul id="items">
-                    <li>? Find your public key</li>
+                    <HelpOutlineIcon /><li>Find your public key</li>
                 </ul>
             </div>
         </div>
