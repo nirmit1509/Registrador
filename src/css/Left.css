@@ -44,14 +44,19 @@
 }
 
 .left__middle > ul > li {
-    color: rgba(255, 255, 255, 0.555);
-    padding: 10px;
-    font-size: 18px;
-    cursor: pointer;
+    color: rgba(255, 255, 255, 0.555) !important;
+    padding: 10px !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
 }
 
 .left__middle > ul :hover, .left__bottom > ul :hover {
-    color: white;
+    color: white  !important;
+}
+
+.left__middle a {
+    text-decoration: inherit;
+    color: inherit;
 }
 
 .left__bottom {
@@ -79,7 +84,7 @@
     list-style-type: none;
 }
 
-.add__property {
+#items .add__property {
     display: flex;
     flex-direction: row;
     align-items: center;

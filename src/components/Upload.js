@@ -11,12 +11,12 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
         margin: theme.spacing(1),
-        width: '35ch',
+        width: '25vw',
       },
     },
     dropzone: {
         '& > *': {
-            width: '65ch'
+            width: '65vw'
         },
     },
 }));
@@ -37,18 +37,19 @@ function Upload() {
         console.log(location);
         console.log(cost);
         console.log(hash);
+        e.target.reset();
     }
 
     const captureFile = (e) => {
         const file = e.target.files[0]
         const reader = new window.FileReader()
         reader.readAsArrayBuffer(file)
-        reader.onloadend = () => {
-        // console.log(Buffer(reader.result))
-        ipfs.add(Buffer(reader.result), (err, ipfsHash) => {
+        reader.onloadend = async() => {
+        console.log(Buffer(reader.result))
+        await ipfs.add(Buffer(reader.result), (err, ipfsHash) => {
             setHash(ipfsHash[0].hash)
+            console.log(ipfsHash[0].hash)
         })
-        // console.log(hash);
     }}
 
     return (
@@ -79,23 +80,22 @@ function Upload() {
                     onChange={e=> {setLocation(e.target.value)}} 
                     required
                 />
-                <DropzoneArea 
+                {/* <DropzoneArea 
                     className={classes.dropzone}
                     type='file'
                     onSave = {(e) => captureFile(e) }
-                />
-                {/* <input 
+                /> */}
+                <input 
                     type='file' 
                     onChange={(event) => {
                         captureFile(event)
                     }}
-                /> */}
+                />
                 <Button
                     variant="contained"
                     type="submit"
                     color="default"
                     className="upload_btn"
-                    style={{width:'35ch'}}
                     startIcon={<CloudUploadIcon />}
                 >
                     Upload

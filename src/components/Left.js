@@ -14,14 +14,11 @@ function Left() {
                 <h2>Secure Share</h2>
             </div>
             <div className="left__middle">
-                <ul id="items">
-                    <li className="add__property">
-                        <AddIcon /> 
-                        Upload
-                    </li>
-                    <li>Home</li>
-                    <li>My Properties</li>
-                    <li>Pending Requests</li>
+                <ul id="items">            
+                    <li className="add__property"> <AddIcon /> <a href="/upload">Upload</a> </li>
+                    <li> <a href="/home">Home</a> </li>
+                    <li> <a href="/my-properties">My Properties</a> </li>
+                    <li> <a href="/pending-requests">Pending Requests</a> </li>
                 </ul>
             </div>
             <div className="left__bottom">
