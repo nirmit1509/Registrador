@@ -4,10 +4,10 @@
 }
 
 .right__top, .right__body {
-    width: 50vw;
+    width: 67vw;
     display: flex;
     flex-direction: row;
-    padding-left: 5vw;
+    padding-left: 2vw;
 }
 
 .right__top {

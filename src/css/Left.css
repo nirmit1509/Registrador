@@ -4,7 +4,7 @@
 }
 
 .left__top, .left__middle, .left__bottom {
-    width: 20vw;
+    width: 19vw;
     display: flex;
     flex-direction: row;
 }
@@ -16,15 +16,15 @@
 }
 
 .left__top > img {
-    height: 35px;
-    width: 35px;
-    margin-left: 30px;
-    margin-top: 25px;
+    height: 55px;
+    width: 55px;
+    margin-left: 10px;
+    margin-top: 15px;
 }
 
 .left__top > h2 {
-    padding-top: 30px;
-    padding-left: 10px;
+    padding-top: 4vh;
+    padding-left: 1vw;
     color: rgb(58, 66, 182);
     font-size: 23px;
 }
@@ -32,7 +32,7 @@
 .left__middle {
     display: flex;
     flex-direction: row;
-    height: 58vh;
+    height: 65vh;
     background-color: rgb(19, 28, 143);
     border-radius: 0 40px 0 0;
 }
@@ -55,7 +55,7 @@
 }
 
 .left__bottom {
-    height: 15vh;
+    height: 13vh;
     background-color: rgb(19, 28, 143);
     border-radius: 0 0 0 40px;
 }
@@ -77,4 +77,16 @@
 
 #items {
     list-style-type: none;
+}
+
+.add__property {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 5px;
+    margin-right: 1px;
+    margin-bottom: 4px;
+    width: 7vw;
+    box-shadow: 0px 5px 15px 3px rgba(2, 8, 43, 0.5);
+    border-radius: 25px;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Right.css';
+import '../css/Right.css';
 import Navbar from './Navbar';
 import MainContent from './MainContent';
 

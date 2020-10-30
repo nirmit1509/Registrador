@@ -1,11 +1,15 @@
-import React from 'react'
+import React from 'react';
+import '../css/MainContent.css';
+import Shared from './Shared';
+import Upload from './Upload';
 
 function MainContent() {
     return (
         <div className="main__content">
-            <h1>Main Content</h1>
+            {/* <Shared /> */}
+            <Upload />
         </div>
     )
 }
 
-export default MainContent
+export default MainContent;

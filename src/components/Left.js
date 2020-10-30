@@ -1,7 +1,7 @@
 import React from 'react';
-import './Left.css';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import logo from '../logo.png';
+import '../css/Left.css';
+import AddIcon from '@material-ui/icons/Add';
+import logo from '../assets/logo.jpg';
 
 function Left() {
     return (
@@ -15,15 +15,18 @@ function Left() {
             </div>
             <div className="left__middle">
                 <ul id="items">
+                    <li className="add__property">
+                        <AddIcon /> 
+                        Upload
+                    </li>
                     <li>Home</li>
-                    <li>Shared</li>
-                    <li>Send Request</li>
+                    <li>My Properties</li>
                     <li>Pending Requests</li>
                 </ul>
             </div>
             <div className="left__bottom">
                 <ul id="items">
-                    <HelpOutlineIcon /><li>Find your public key</li>
+                    {/* <HelpOutlineIcon /><li>Find your public key</li> */}
                 </ul>
             </div>
         </div>
