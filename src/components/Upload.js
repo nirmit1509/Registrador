@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Upload() {
+function Upload( { account, contract }) {
 
     const classes = useStyles();
 
@@ -37,6 +37,11 @@ function Upload() {
         console.log(location);
         console.log(cost);
         console.log(hash);
+        console.log(account);
+        contract.methods.registerLand(hash, location, cost, phone)
+        .send({ from: account }, (error, transactionHash) => {
+              console.log("transaction hash is ",transactionHash);
+            });
         e.target.reset();
     }
 

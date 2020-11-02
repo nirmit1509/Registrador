@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/Navbar.css';
 import { Avatar } from "@material-ui/core";
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+// import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 
 function Navbar() {
     return (
