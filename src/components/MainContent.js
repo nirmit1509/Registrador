@@ -17,6 +17,7 @@ function MainContent() {
     const [networkId, setNetworkId] = useState('');
     const [landTransferContract, setLandTransferContract] = useState(null);
     const [properties, setProperties] = useState([]);
+    const [requests, setRequests] = useState([]);
 
 
     async function establishConnection() {
@@ -36,14 +37,19 @@ function MainContent() {
             // console.log(registrar)
             setLandTransferContract(contract)
             const propCount = await contract.methods.propertyCount().call();
-            console.log(typeof(propCount))
             let temp = []
             for(let i=1; i<=propCount; i++) {
                 const property = await contract.methods.properties(i).call()
-                // console.log(property)
                 temp.push(property)
             }
             setProperties(temp);
+            const requestCount = await contract.methods.requestCount().call();
+            temp = []
+            for(let i=1; i<=requestCount; i++) {
+                const request = await contract.methods.requests(i).call()
+                temp.push(request)
+            }
+            setRequests(temp);
             setLoading(false);
         } 
         else {
@@ -55,7 +61,7 @@ function MainContent() {
         establishConnection();
     }, []);
     
-    console.log(properties)
+    // console.log(requests)
 
     return (
         !loading ?
@@ -72,10 +78,10 @@ function MainContent() {
                         <Upload account={account} contract={landTransferContract} />
                     </Route>
                     <Route exact path="/my-properties">
-                        <MyProperties />
+                        <MyProperties account={account} contract={landTransferContract} properties={properties} />
                     </Route>
                     <Route exact path="/pending-requests">
-                        <PendingRequests />
+                        <PendingRequests account={account} contract={landTransferContract} requests={requests} />
                     </Route>
                 </Switch>
             </Router>    

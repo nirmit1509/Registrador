@@ -39,6 +39,7 @@ contract LandTransfer {
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
         p.seller = _newOwner;
         p.status = Status.notForSale;
+        p.phone = "";
     }
 
     uint public requestCount = 0;
@@ -48,6 +49,7 @@ contract LandTransfer {
         uint propertyId;
         address owner;
         address buyer;
+        bool ownerApproved;
         bool rejected;
         bool successful;
     }
@@ -60,13 +62,14 @@ contract LandTransfer {
         require(p.status!=Status.sold, "Land is already sold to another buyer.");
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
         requestCount ++;
-        requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, false, false);
+        requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, false, false, false);
         p.status = Status.inProgress;
     }
 
-    function ownerApproval (uint _requestId) view public {
-        purchaseRequest memory r = requests[_requestId];
+    function ownerApproval (uint _requestId) public {
+        purchaseRequest storage r = requests[_requestId];
         require(msg.sender==r.owner, "You are not the owner of the land requested");
+        r.ownerApproved = true;
         //send notification to Land Registrar
     }
 
@@ -81,6 +84,7 @@ contract LandTransfer {
     function registrarApproval (uint _requestId) public {
         purchaseRequest storage r = requests[_requestId];
         require(r.rejected==false, "Owner unwilling to sell his land to this requester.");
+        require(r.ownerApproved==true, "Owner unwilling to sell his land to this requester.");
         // Check whether msg.sender is the land registrar
         // require(msg.sender==r.owner, "You are not the owner of the land requested");
         r.successful = true;
@@ -97,4 +101,5 @@ contract LandTransfer {
         r.successful = false;
         //send notification to Requester
     }
+    
 }

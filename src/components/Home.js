@@ -12,6 +12,15 @@ const headerCSS = {
 
 function Home({ account, contract, properties }) {
 
+    const requestProp = (e, propId) => {
+        console.log("Requested");
+        console.log(propId);
+        contract.methods.sendRequest(propId)
+        .send({ from: account }, (error, transactionHash) => {
+          console.log("transaction hash is ",transactionHash);
+        });
+    }
+
     const columns = [
         { title: "Prop ID",           field: "propertyId", headerStyle: headerCSS },
         { title: "Owner",             field: "seller",     headerStyle: headerCSS },
@@ -20,23 +29,23 @@ function Home({ account, contract, properties }) {
         { title: "Contact Details",   field: "phone",      headerStyle: headerCSS },
         { title: "Status",            field: "status",     headerStyle: headerCSS },
         { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS },
-        // { headerStyle: headerCSS,     export: false,
-        //   render: row => 
-        //   <div> 
-        //     { 
-        //     row.is_blocked==='No' 
-        //     ? 
-        //     <Button variant="outline-danger" onClick={e=>block(e, row)}>Block</Button> 
-        //     :
-        //     <Button variant="outline-success" onClick={e=>unblock(e, row)}>Unblock</Button>
-        //     }
-        //   </div> 
-        // },
+        { headerStyle: headerCSS,
+          render: row => 
+          <div> 
+            { 
+            (row.status==="1" || row.status==="2") 
+            ? 
+            <Button variant="outline-info" onClick={e=>requestProp(e, row.propertyId)}>Request</Button> 
+            :
+            <Button variant="outline-secondary" disabled>Request</Button>
+            }
+          </div> 
+        },
     ]
 
     return (
         <div className="home">
-            <small>{account}</small>
+            {/* <small>{account}</small> */}
             <MaterialTable 
                     title="All Properties listed: "
                     data = {properties}
@@ -53,7 +62,6 @@ function Home({ account, contract, properties }) {
                         // exportAllData: true
                     }}
             />
-
         </div>
     )
 }

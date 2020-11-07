@@ -42,7 +42,7 @@ function Upload( { account, contract }) {
         .send({ from: account }, (error, transactionHash) => {
               console.log("transaction hash is ",transactionHash);
             });
-        e.target.reset();
+        // e.target.reset();
     }
 
     const captureFile = (e) => {
