@@ -2,25 +2,21 @@ import React from 'react';
 import '../css/Home.css';
 import MaterialTable from 'material-table';
 import {Button} from 'react-bootstrap';
-
-const headerCSS = {
-    backgroundColor: 'rgb(220, 222, 224)',
-    fontWeight: 'bold',
-    fontSize: '15px',
-}
+import {headerCSS, cellCSS} from '../constants';
 
 
 function PendingRequests({ account, contract, requests }) {
 
     const columns = [
-        { title: "Request ID",        field: "requestId",  headerStyle: headerCSS },
-        { title: "Prop ID",           field: "propertyId", headerStyle: headerCSS },
-        { title: "Property Owner",    field: "owner",      headerStyle: headerCSS },
-        // { title: "Cost (in Eth)",     field: "cost",       headerStyle: headerCSS },
-        // { title: "Property Location", field: "location",   headerStyle: headerCSS },
-        // { title: "Contact Details",   field: "phone",      headerStyle: headerCSS },
-        // { title: "Status",            field: "status",     headerStyle: headerCSS },
-        // { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS },
+        { title: "Request ID",        field: "requestId",  headerStyle: headerCSS,  cellStyle: cellCSS },
+        { title: "Prop ID",           field: "propertyId", headerStyle: headerCSS,  cellStyle: cellCSS },
+        // { title: "Property Owner",    field: "owner",      headerStyle: headerCSS,  cellStyle: cellCSS },
+        { title: "Request Initiator", field: "buyer",      headerStyle: headerCSS,  cellStyle: cellCSS },
+        // { title: "Cost (in Eth)",     field: "cost",       headerStyle: headerCSS,  cellStyle: cellCSS },
+        // { title: "Property Location", field: "location",   headerStyle: headerCSS,  cellStyle: cellCSS },
+        // { title: "Contact Details",   field: "phone",      headerStyle: headerCSS,  cellStyle: cellCSS },
+        // { title: "Status",            field: "status",     headerStyle: headerCSS,  cellStyle: cellCSS },
+        // { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS,  cellStyle: cellCSS },
         // { headerStyle: headerCSS,
         //   render: row => 
         //   <div> 
@@ -35,11 +31,19 @@ function PendingRequests({ account, contract, requests }) {
         // },
     ]
 
+    let data = []
+    const fetchData = () => {
+        requests.map((property, key) => {
+                data.push(property)
+        })
+    }
+    fetchData();
+
     return (
         <div className="pending__requests">
             <MaterialTable 
-                    title="All Properties listed: "
-                    data = {requests}
+                    title="Pending Requests: "
+                    data = {data}
                     columns = {columns}
                     options = {{
                         search: true,

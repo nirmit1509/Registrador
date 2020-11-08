@@ -41,7 +41,7 @@ function Upload( { account, contract }) {
         contract.methods.registerLand(hash, location, cost, phone)
         .send({ from: account }, (error, transactionHash) => {
               console.log("transaction hash is ",transactionHash);
-            });
+            })
         // e.target.reset();
     }
 

@@ -1,14 +1,10 @@
 import React from 'react';
 import '../css/Home.css';
 import MaterialTable from 'material-table';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Tooltip from '@material-ui/core/Tooltip';
 import {Button} from 'react-bootstrap';
-
-const headerCSS = {
-    backgroundColor: 'rgb(220, 222, 224)',
-    fontWeight: 'bold',
-    fontSize: '15px',
-}
-
+import {headerCSS, cellCSS} from '../constants';
 
 function Home({ account, contract, properties }) {
 
@@ -22,22 +18,34 @@ function Home({ account, contract, properties }) {
     }
 
     const columns = [
-        { title: "Prop ID",           field: "propertyId", headerStyle: headerCSS },
-        { title: "Owner",             field: "seller",     headerStyle: headerCSS },
-        { title: "Cost (in Eth)",     field: "cost",       headerStyle: headerCSS },
-        { title: "Property Location", field: "location",   headerStyle: headerCSS },
-        { title: "Contact Details",   field: "phone",      headerStyle: headerCSS },
-        { title: "Status",            field: "status",     headerStyle: headerCSS },
-        { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS },
-        { headerStyle: headerCSS,
+        { title: "Prop ID",           field: "propertyId", headerStyle: headerCSS,  cellStyle: cellCSS },
+        { title: "Owner",             field: "seller",     headerStyle: headerCSS,  cellStyle: cellCSS,
+          render: row => 
+            <Tooltip title={row.seller} placement="bottom-end">
+                <div>{`${row.seller.slice(0, -20)}...`}</div>
+            </Tooltip>, 
+        },
+        { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS,  cellStyle: cellCSS,
+          render: row => 
+            <Tooltip title={row.ipfsHash} placement="bottom-end">
+                <FileCopyIcon 
+                    onClick={()=> window.open(`https://ipfs.io/ipfs/${row.ipfsHash}`, '_blank')} 
+                />
+            </Tooltip>, 
+        },
+        { title: "Cost (Eth)",        field: "cost",       headerStyle: headerCSS,  cellStyle: cellCSS },
+        { title: "Property Location", field: "location",   headerStyle: headerCSS,  cellStyle: cellCSS },
+        { title: "Contact Details",   field: "phone",      headerStyle: headerCSS,  cellStyle: cellCSS },
+        { title: "Status",            field: "status",     headerStyle: headerCSS,  cellStyle: cellCSS },
+        { headerStyle: headerCSS,     cellStyle: cellCSS,
           render: row => 
           <div> 
             { 
             (row.status==="1" || row.status==="2") 
             ? 
-            <Button variant="outline-info" onClick={e=>requestProp(e, row.propertyId)}>Request</Button> 
+            <Button size="sm" variant="outline-info" onClick={e=>requestProp(e, row.propertyId)}>Request</Button> 
             :
-            <Button variant="outline-secondary" disabled>Request</Button>
+            <Button size="sm" variant="outline-secondary" disabled>Request</Button>
             }
           </div> 
         },
@@ -45,7 +53,7 @@ function Home({ account, contract, properties }) {
 
     return (
         <div className="home">
-            {/* <small>{account}</small> */}
+            <small>{account}</small>
             <MaterialTable 
                     title="All Properties listed: "
                     data = {properties}
@@ -53,13 +61,8 @@ function Home({ account, contract, properties }) {
                     options = {{
                         search: true,
                         sorting: true,
-                        // selection: true,
-                        // filtering: true,
                         paging: true,
                         pageSizeOptions: [5],
-                        // exportButton: {pdf: false, csv: true},
-                        // exportButton: true,
-                        // exportAllData: true
                     }}
             />
         </div>
