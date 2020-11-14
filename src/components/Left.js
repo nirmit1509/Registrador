@@ -19,6 +19,7 @@ function Left() {
                     <li> <a href="/home">Home</a> </li>
                     <li> <a href="/my-properties">My Properties</a> </li>
                     <li> <a href="/pending-requests">Pending Requests</a> </li>
+                    <li> <a href="/requested-by-me">Requested By Me</a> </li>
                 </ul>
             </div>
             <div className="left__bottom">

@@ -2,34 +2,12 @@ import React from 'react';
 import '../css/Home.css';
 import MaterialTable from 'material-table';
 import {Button} from 'react-bootstrap';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Tooltip from '@material-ui/core/Tooltip';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import {headerCSS, cellCSS, SuccessAlert, FailureAlert} from '../constants';
 
 
-function PendingRequests({ account, contract, requests }) {
-
-    const approveByOwner = (e, reqId) => {
-        console.log(reqId);
-        contract.methods.ownerApproval(reqId)
-        .send({ from: account }, (error, transactionHash) => {
-          if(transactionHash) {
-            SuccessAlert("You approved this request..")
-          }
-          console.log("transaction hash is ",transactionHash);
-        });
-    }
-
-    const rejectByOwner = (e, reqId) => {
-        console.log(reqId);
-        contract.methods.ownerRejection(reqId)
-        .send({ from: account }, (error, transactionHash) => {
-          if(transactionHash) {
-            FailureAlert("You rejected this request initiated..")
-          }
-          console.log("transaction hash is ",transactionHash);
-        });
-    }
+function RequestedByMe({ account, contract, requests }) {
 
     const columns = [
         { title: "Request ID",        field: "requestId",  headerStyle: headerCSS,  cellStyle: cellCSS },
@@ -54,44 +32,20 @@ function PendingRequests({ account, contract, requests }) {
           render: row => 
             row.ownerApproved && !row.ownerRejected
             ?
-            <div>{`Approved by you.`}</div>
+            <div style={{color: 'green'}}>{`Owner Approved your request.`}</div>
             :
             !row.ownerApproved && row.ownerRejected
             ?
-            <div>{`Rejected by you.`}</div>
+            <div style={{color: 'red'}}>{`Owner Declined your request.`}</div>
             :
-            <div>{`Please respond to this request.`}</div>
-        },
-        { headerStyle: headerCSS,     cellStyle: cellCSS,
-            render: row => 
-            <div> 
-              { 
-              (row.owner===account && !(row.ownerRejected || row.ownerApproved))
-              ? 
-               <Button size="sm" variant="outline-success" onClick={e=>approveByOwner(e, row.requestId)}>Approve</Button>
-              :
-               <Button size="sm" variant="outline-secondary" disabled>Approve</Button>
-              }
-            </div> 
-        },
-        { headerStyle: headerCSS,     cellStyle: cellCSS,
-            render: row => 
-            <div> 
-              { 
-              (row.owner===account && !(row.ownerRejected || row.ownerApproved))
-              ? 
-              <Button size="sm" variant="outline-danger" onClick={e=>rejectByOwner(e, row.propertyId)}>Reject</Button> 
-              :
-              <Button size="sm" variant="outline-secondary" disabled>Reject</Button> 
-              }
-            </div> 
-        },
+            <div>{`Your Request is under evaluation.`}</div>
+        }
     ]
 
     let data = []
     const fetchData = () => {
         requests.map((req, key) => {
-            if(req.owner===account)
+            if(req.buyer===account)
                 data.push(req)
         })
     }
@@ -115,4 +69,4 @@ function PendingRequests({ account, contract, requests }) {
     )
 }
 
-export default PendingRequests;
+export default RequestedByMe;

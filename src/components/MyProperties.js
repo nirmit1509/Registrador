@@ -4,7 +4,7 @@ import MaterialTable from 'material-table';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Tooltip from '@material-ui/core/Tooltip';
 import {Button} from 'react-bootstrap';
-import {headerCSS, cellCSS} from '../constants';
+import {headerCSS, cellCSS, landStatusString} from '../constants';
 
 
 function MyProperties({ account, contract, properties }) {
@@ -14,7 +14,7 @@ function MyProperties({ account, contract, properties }) {
         { title: "Owner",             field: "seller",     headerStyle: headerCSS,  cellStyle: cellCSS,
           render: row => 
             <Tooltip title={row.seller} placement="bottom-end">
-                <div>{`${row.seller.slice(0, -20)}...`}</div>
+                <div>{`${row.seller.slice(0, -25)}....${row.seller.slice(37, 42)}`}</div>
             </Tooltip>, 
         },
         { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS,  cellStyle: cellCSS,
@@ -28,19 +28,9 @@ function MyProperties({ account, contract, properties }) {
         { title: "Cost (Eth)",        field: "cost",       headerStyle: headerCSS,  cellStyle: cellCSS },
         { title: "Property Location", field: "location",   headerStyle: headerCSS,  cellStyle: cellCSS },
         { title: "Contact Details",   field: "phone",      headerStyle: headerCSS,  cellStyle: cellCSS },
-        { title: "Status",            field: "status",     headerStyle: headerCSS,  cellStyle: cellCSS },
-        // { headerStyle: headerCSS,
-        //   render: row => 
-        //   <div> 
-        //     { 
-        //     (row.status==="1" || row.status==="2") 
-        //     ? 
-        //     <Button variant="outline-info" onClick={e=>requestProp(e, row.propertyId)}>Request</Button> 
-        //     :
-        //     <Button variant="outline-secondary" disabled>Request</Button>
-        //     }
-        //   </div> 
-        // },
+        { title: "Status",            field: "status",     headerStyle: headerCSS,  cellStyle: cellCSS,
+          render: row => <span>{landStatusString[row.status]}</span>
+        },
     ]
 
     let data = []
@@ -61,9 +51,6 @@ function MyProperties({ account, contract, properties }) {
                     data = {data}
                     columns = {columns}
                     options = {{
-                        cellStyle: {
-                            fontSize: 5,
-                        },
                         search: true,
                         sorting: true,
                         paging: true,

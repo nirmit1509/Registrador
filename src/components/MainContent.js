@@ -7,6 +7,7 @@ import Upload from './Upload';
 import Home from './Home';
 import MyProperties from './MyProperties';
 import PendingRequests from './PendingRequests';
+import RequestedByMe from './RequestedByMe';
 
 function MainContent() {
 
@@ -59,7 +60,7 @@ function MainContent() {
 
     useEffect(() => {
         establishConnection();
-    }, []);
+    }, [account]);
     
     // console.log(requests)
 
@@ -82,6 +83,9 @@ function MainContent() {
                     </Route>
                     <Route exact path="/pending-requests">
                         <PendingRequests account={account} contract={landTransferContract} requests={requests} />
+                    </Route>
+                    <Route exact path="/requested-by-me">
+                        <RequestedByMe account={account} contract={landTransferContract} requests={requests} />
                     </Route>
                 </Switch>
             </Router>    

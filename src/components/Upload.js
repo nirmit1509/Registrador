@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {TextField, Button} from '@material-ui/core';
 import {DropzoneArea} from 'material-ui-dropzone';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { SuccessAlert } from '../constants';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,8 +42,9 @@ function Upload( { account, contract }) {
         contract.methods.registerLand(hash, location, cost, phone)
         .send({ from: account }, (error, transactionHash) => {
               console.log("transaction hash is ",transactionHash);
+              SuccessAlert("Upload Successful...")
             })
-        // e.target.reset();
+        e.target.reset();
     }
 
     const captureFile = (e) => {

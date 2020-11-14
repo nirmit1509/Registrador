@@ -49,9 +49,13 @@ contract LandTransfer {
         uint propertyId;
         address owner;
         address buyer;
+        string location;
+        uint cost;
+        string ipfsHash;
         bool ownerApproved;
-        bool rejected;
-        bool successful;
+        bool registrarApproved;
+        bool ownerRejected;
+        bool registrarRejected;
     }
 
     mapping(uint => purchaseRequest) public requests;
@@ -62,7 +66,7 @@ contract LandTransfer {
         require(p.status!=Status.sold, "Land is already sold to another buyer.");
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
         requestCount ++;
-        requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, false, false, false);
+        requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, p.location, p.cost, p.ipfsHash, false, false, false, false);
         p.status = Status.inProgress;
     }
 
@@ -76,19 +80,17 @@ contract LandTransfer {
     function ownerRejection (uint _requestId) public {
         purchaseRequest storage r = requests[_requestId];
         require(msg.sender==r.owner, "You are not the owner of the land requested");
-        r.rejected = true;
-        r.successful = false;
+        r.ownerRejected = true;
         //send notification to Requester
     }
 
     function registrarApproval (uint _requestId) public {
         purchaseRequest storage r = requests[_requestId];
-        require(r.rejected==false, "Owner unwilling to sell his land to this requester.");
+        require(r.ownerRejected==false, "Owner unwilling to sell his land to this requester.");
         require(r.ownerApproved==true, "Owner unwilling to sell his land to this requester.");
         // Check whether msg.sender is the land registrar
         // require(msg.sender==r.owner, "You are not the owner of the land requested");
-        r.successful = true;
-        r.rejected = false;
+        r.registrarApproved = true;
         //change the ownership of land function call
         changeOwnership(r.propertyId, r.buyer);
     }
@@ -97,8 +99,7 @@ contract LandTransfer {
         purchaseRequest storage r = requests[_requestId];
         // Check whether msg.sender is the land registrar
         // require(msg.sender==r.owner, "You are not the owner of the land requested");
-        r.rejected = true;
-        r.successful = false;
+        r.registrarRejected = true;
         //send notification to Requester
     }
     
