@@ -1,6 +1,7 @@
 .main__content {
     height: 73vh;
     width: 65vw;
+    margin-top: 3vh;
 }
 
 .loading__gif {

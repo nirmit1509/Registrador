@@ -6,7 +6,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {Button} from 'react-bootstrap';
 import {headerCSS, cellCSS, landStatusString, SuccessAlert} from '../constants';
 
-function Home({ account, contract, properties }) {
+function Home({ account, contract, properties, isRegistrar }) {
 
     const requestProp = (e, propId) => {
         console.log("Requested");
@@ -46,7 +46,7 @@ function Home({ account, contract, properties }) {
           render: row => 
           <div> 
             { 
-            (row.seller===account || row.status===0 || row.status===3)
+            (row.seller===account || row.status===0 || row.status===3 || isRegistrar)
             ? 
             <Button size="sm" variant="outline-secondary" disabled>Request</Button>
             :
@@ -58,7 +58,6 @@ function Home({ account, contract, properties }) {
 
     return (
         <div className="home">
-            <small>{account}</small>
             <MaterialTable 
                     title="All Properties listed: "
                     data = {properties}

@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.8.0;
 
 contract LandTransfer {
 
-    address public registrar = 0xE6224E87d1b139aE578bB74e337089aCC7D8514B;
+    address public registrar = 0x2E43b638d3Da60077EB5B0EC321C515Ba8606787;
 
     // constructor (address _registrar) public {
     //     registrar = _registrar;

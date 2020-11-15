@@ -7,11 +7,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {headerCSS, cellCSS, SuccessAlert, FailureAlert} from '../constants';
 
 
-function PendingRequests({ account, contract, requests }) {
+function RegistrarRequests({ account, contract, requests }) {
 
-    const approveByOwner = (e, reqId) => {
+    const approveByRegistrar = (e, reqId) => {
         console.log(reqId);
-        contract.methods.ownerApproval(reqId)
+        contract.methods.registrarApproval(reqId)
         .send({ from: account }, (error, transactionHash) => {
           if(transactionHash) {
             SuccessAlert("You approved this request..")
@@ -20,9 +20,9 @@ function PendingRequests({ account, contract, requests }) {
         });
     }
 
-    const rejectByOwner = (e, reqId) => {
+    const rejectByRegistrar = (e, reqId) => {
         console.log(reqId);
-        contract.methods.ownerRejection(reqId)
+        contract.methods.registrarRejection(reqId)
         .send({ from: account }, (error, transactionHash) => {
           if(transactionHash) {
             FailureAlert("You rejected this request initiated..")
@@ -52,11 +52,11 @@ function PendingRequests({ account, contract, requests }) {
         { title: "Property Location", field: "location",   headerStyle: headerCSS,  cellStyle: cellCSS },
         { title: "Status",            headerStyle: headerCSS,  cellStyle: cellCSS,
           render: row => 
-            row.ownerApproved && !row.ownerRejected
+            row.registrarApproved && !row.registrarRejected
             ?
             <div>{`Approved by you.`}</div>
             :
-            !row.ownerApproved && row.ownerRejected
+            !row.registrarApproved && row.registrarRejected
             ?
             <div>{`Rejected by you.`}</div>
             :
@@ -66,9 +66,9 @@ function PendingRequests({ account, contract, requests }) {
             render: row => 
             <div> 
               { 
-              (row.owner===account && !(row.ownerRejected || row.ownerApproved))
+              (!(row.registrarRejected || row.registrarApproved))
               ? 
-               <Button size="sm" variant="outline-success" onClick={e=>approveByOwner(e, row.requestId)}>Approve</Button>
+               <Button size="sm" variant="outline-success" onClick={e=>approveByRegistrar(e, row.requestId)}>Approve</Button>
               :
                <Button size="sm" variant="outline-secondary" disabled>Approve</Button>
               }
@@ -78,9 +78,9 @@ function PendingRequests({ account, contract, requests }) {
             render: row => 
             <div> 
               { 
-              (row.owner===account && !(row.ownerRejected || row.ownerApproved))
+              (!(row.registrarRejected || row.registrarApproved))
               ? 
-              <Button size="sm" variant="outline-danger" onClick={e=>rejectByOwner(e, row.propertyId)}>Reject</Button> 
+              <Button size="sm" variant="outline-danger" onClick={e=>rejectByRegistrar(e, row.propertyId)}>Reject</Button> 
               :
               <Button size="sm" variant="outline-secondary" disabled>Reject</Button> 
               }
@@ -91,7 +91,7 @@ function PendingRequests({ account, contract, requests }) {
     let data = []
     const fetchData = () => {
         requests.map((req, key) => {
-            if(req.owner===account)
+            if(req.ownerApproved)
                 data.push(req)
         })
     }
@@ -100,7 +100,7 @@ function PendingRequests({ account, contract, requests }) {
     return (
         <div className="pending__requests">
             <MaterialTable 
-                    title="Pending Requests for your Property: "
+                    title="Pending Requests for you to confirm: "
                     data = {data}
                     columns = {columns}
                     options = {{
@@ -114,4 +114,4 @@ function PendingRequests({ account, contract, requests }) {
     )
 }
 
-export default PendingRequests;
+export default RegistrarRequests;

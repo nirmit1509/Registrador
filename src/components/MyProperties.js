@@ -3,7 +3,6 @@ import '../css/Home.css';
 import MaterialTable from 'material-table';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Tooltip from '@material-ui/core/Tooltip';
-import {Button} from 'react-bootstrap';
 import {headerCSS, cellCSS, landStatusString} from '../constants';
 
 
@@ -45,7 +44,6 @@ function MyProperties({ account, contract, properties }) {
 
     return (
         <div className="my__properties">
-            <small>{account}</small>
             <MaterialTable 
                     title="My Properties: "
                     data = {data}

@@ -1,7 +1,6 @@
 import React from 'react';
 import '../css/Home.css';
 import MaterialTable from 'material-table';
-import {Button} from 'react-bootstrap';
 import Tooltip from '@material-ui/core/Tooltip';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import {headerCSS, cellCSS, SuccessAlert, FailureAlert} from '../constants';
@@ -53,9 +52,8 @@ function RequestedByMe({ account, contract, requests }) {
 
     return (
         <div className="pending__requests">
-            <small>{account}</small>
             <MaterialTable 
-                    title="Pending Requests for your Property: "
+                    title="Your Requests Status: "
                     data = {data}
                     columns = {columns}
                     options = {{
