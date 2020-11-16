@@ -7,23 +7,23 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {headerCSS, cellCSS, SuccessAlert, FailureAlert} from '../constants';
 
 
-function PendingRequests({ account, contract, requests }) {
+function PendingRequests({ web3, account, contract, requests }) {
 
-    const approveByOwner = (e, reqId) => {
-        console.log(reqId);
-        contract.methods.ownerApproval(reqId)
-        .send({ from: account }, (error, transactionHash) => {
+    const approveByOwner = (e, row) => {
+        const price = web3.utils.toWei(row.cost.toString(), 'Ether')
+        contract.methods.ownerApproval(row.requestId)
+        .send({ from: account, value: price }, (error, transactionHash) => {
           if(transactionHash) {
             SuccessAlert("You approved this request..")
           }
-          console.log("transaction hash is ",transactionHash);
+          console.log("transaction hash is ", transactionHash);
         });
     }
 
-    const rejectByOwner = (e, reqId) => {
-        console.log(reqId);
-        contract.methods.ownerRejection(reqId)
-        .send({ from: account }, (error, transactionHash) => {
+    const rejectByOwner = (e, row) => {
+        const price = web3.utils.toWei(row.cost.toString(), 'Ether')
+        contract.methods.ownerRejection(row.requestId)
+        .send({ from: account, value: price }, (error, transactionHash) => {
           if(transactionHash) {
             FailureAlert("You rejected this request initiated..")
           }
@@ -54,11 +54,11 @@ function PendingRequests({ account, contract, requests }) {
           render: row => 
             row.ownerApproved && !row.ownerRejected
             ?
-            <div>{`Approved by you.`}</div>
+            <div style={{color: 'green'}}>{`Approved by you.`}</div>
             :
             !row.ownerApproved && row.ownerRejected
             ?
-            <div>{`Rejected by you.`}</div>
+            <div style={{color: 'red'}}>{`Rejected by you.`}</div>
             :
             <div>{`Please respond to this request.`}</div>
         },
@@ -68,7 +68,7 @@ function PendingRequests({ account, contract, requests }) {
               { 
               (row.owner===account && !(row.ownerRejected || row.ownerApproved))
               ? 
-               <Button size="sm" variant="outline-success" onClick={e=>approveByOwner(e, row.requestId)}>Approve</Button>
+               <Button size="sm" variant="outline-success" onClick={e=>approveByOwner(e, row)}>Approve</Button>
               :
                <Button size="sm" variant="outline-secondary" disabled>Approve</Button>
               }
@@ -80,7 +80,7 @@ function PendingRequests({ account, contract, requests }) {
               { 
               (row.owner===account && !(row.ownerRejected || row.ownerApproved))
               ? 
-              <Button size="sm" variant="outline-danger" onClick={e=>rejectByOwner(e, row.propertyId)}>Reject</Button> 
+              <Button size="sm" variant="outline-danger" onClick={e=>rejectByOwner(e, row)}>Reject</Button> 
               :
               <Button size="sm" variant="outline-secondary" disabled>Reject</Button> 
               }

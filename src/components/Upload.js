@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
+import {useDropzone} from 'react-dropzone';
 import '../css/Upload.css';
 import ipfs from '../ipfs';
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField, Button} from '@material-ui/core';
-import {DropzoneArea} from 'material-ui-dropzone';
+import RootRef from '@material-ui/core/RootRef'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { SuccessAlert } from '../constants';
 
@@ -30,15 +31,62 @@ function Upload( { account, contract }) {
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
     const [cost, setCost] = useState('');
+    const [file, setFile] = useState();
+    const [loading, setLoading] = useState(false);
+
+    const onDrop = useCallback(acceptedFiles => {
+        setLoading(true)
+        acceptedFiles.forEach((file) => {
+            const reader = new FileReader()
+            reader.onabort = () => console.log('file reading was aborted')
+            reader.onerror = () => console.log('file reading has failed')
+            reader.readAsArrayBuffer(file)
+            reader.onloadend = async() => {
+                await ipfs.add(Buffer(reader.result), (err, ipfsHash) => {
+                    setHash(ipfsHash[0].hash)
+                    setLoading(false)
+                    setFile(file)
+                    SuccessAlert('File Uploaded Successfully...')
+                })
+        }})
+    }, []);
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    const {ref, ...rootProps} = getRootProps()
+
+    const baseStyle = {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        paddingTop: '6%',
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: 'rgb(224 223 164)',
+        borderStyle: 'dashed',
+        backgroundColor: 'rgb(239 245 203)',
+        color: '#bdbdbd',
+        outline: 'none',
+        width: '50vw',
+        height: '25vh',
+        marginTop: '2%',
+        marginLeft: '5%',
+        transition: 'border .24s ease-in-out'
+      };
+    const activeStyle = {
+        borderColor: '#2196f3'
+    };
+
+    const style = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? activeStyle : {}),
+      }), [
+        isDragActive,
+      ]);
 
     const uploadDetails = (e) => {
         e.preventDefault();
-        console.log('Submitted');
-        console.log(phone);
-        console.log(location);
-        console.log(cost);
-        console.log(hash);
-        console.log(account);
         contract.methods.registerLand(hash, location, cost, phone)
         .send({ from: account }, (error, transactionHash) => {
               console.log("transaction hash is ",transactionHash);
@@ -46,18 +94,6 @@ function Upload( { account, contract }) {
             })
         e.target.reset();
     }
-
-    const captureFile = (e) => {
-        const file = e.target.files[0]
-        const reader = new window.FileReader()
-        reader.readAsArrayBuffer(file)
-        reader.onloadend = async() => {
-        console.log(Buffer(reader.result))
-        await ipfs.add(Buffer(reader.result), (err, ipfsHash) => {
-            setHash(ipfsHash[0].hash)
-            console.log(ipfsHash[0].hash)
-        })
-    }}
 
     return (
         <div className="upload">
@@ -83,21 +119,44 @@ function Upload( { account, contract }) {
                 <TextField 
                     id="location" 
                     label="Property Location" 
-                    style={{width:'70ch', margin:'8px'}}
+                    style={{width:'55vw', margin:'8px'}}
                     onChange={e=> {setLocation(e.target.value)}} 
                     required
                 />
-                {/* <DropzoneArea 
-                    className={classes.dropzone}
-                    type='file'
-                    onSave = {(e) => captureFile(e) }
-                /> */}
-                <input 
-                    type='file' 
-                    onChange={(event) => {
-                        captureFile(event)
-                    }}
-                />
+                {
+                    loading
+                    ?
+                    <div className="loading__gif">
+                        <img 
+                            src="https://i.gifer.com/KDVh.gif"     
+                            height='150vh'
+                        />
+                    </div>
+                    :
+                    <div {...getRootProps({style})}>
+                        <input {...getInputProps()} />
+                        {
+                            isDragActive ?
+                            <p>Drop the files here ...</p> :
+                            <p>{`Drag & drop file here, or click to select file`}</p>
+                        }
+                    </div>
+                }
+
+                {
+                    file
+                    ?
+                    <TextField 
+                        className={classes.root}
+                        id="file" 
+                        label="File Uploaded" 
+                        value={file.name}
+                        style={{width:'55vw', margin:'8px'}}
+                    />
+                    :
+                    null
+                }
+                               
                 <Button
                     variant="contained"
                     type="submit"

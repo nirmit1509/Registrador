@@ -7,23 +7,23 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {headerCSS, cellCSS, SuccessAlert, FailureAlert} from '../constants';
 
 
-function RegistrarRequests({ account, contract, requests }) {
+function RegistrarRequests({ web3, account, contract, requests }) {
 
-    const approveByRegistrar = (e, reqId) => {
-        console.log(reqId);
-        contract.methods.registrarApproval(reqId)
-        .send({ from: account }, (error, transactionHash) => {
+    const approveByRegistrar = (e, row) => {
+        const price = web3.utils.toWei(row.cost.toString(), 'Ether')
+        contract.methods.registrarApproval(row.requestId)
+        .send({ from: account, value: price }, (error, transactionHash) => {
           if(transactionHash) {
             SuccessAlert("You approved this request..")
           }
           console.log("transaction hash is ",transactionHash);
-        });
+        })
     }
 
-    const rejectByRegistrar = (e, reqId) => {
-        console.log(reqId);
-        contract.methods.registrarRejection(reqId)
-        .send({ from: account }, (error, transactionHash) => {
+    const rejectByRegistrar = (e, row) => {
+        const price = web3.utils.toWei(row.cost.toString(), 'Ether')
+        contract.methods.registrarRejection(row.requestId)
+        .send({ from: account, value: price }, (error, transactionHash) => {
           if(transactionHash) {
             FailureAlert("You rejected this request initiated..")
           }
@@ -68,7 +68,7 @@ function RegistrarRequests({ account, contract, requests }) {
               { 
               (!(row.registrarRejected || row.registrarApproved))
               ? 
-               <Button size="sm" variant="outline-success" onClick={e=>approveByRegistrar(e, row.requestId)}>Approve</Button>
+               <Button size="sm" variant="outline-success" onClick={e=>approveByRegistrar(e, row)}>Approve</Button>
               :
                <Button size="sm" variant="outline-secondary" disabled>Approve</Button>
               }
@@ -80,7 +80,7 @@ function RegistrarRequests({ account, contract, requests }) {
               { 
               (!(row.registrarRejected || row.registrarApproved))
               ? 
-              <Button size="sm" variant="outline-danger" onClick={e=>rejectByRegistrar(e, row.propertyId)}>Reject</Button> 
+              <Button size="sm" variant="outline-danger" onClick={e=>rejectByRegistrar(e, row.requestId)}>Reject</Button> 
               :
               <Button size="sm" variant="outline-secondary" disabled>Reject</Button> 
               }

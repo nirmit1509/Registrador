@@ -11,10 +11,10 @@ function RequestedByMe({ account, contract, requests }) {
     const columns = [
         { title: "Request ID",        field: "requestId",  headerStyle: headerCSS,  cellStyle: cellCSS },
         { title: "Prop ID",           field: "propertyId", headerStyle: headerCSS,  cellStyle: cellCSS },
-        { title: "Request Initiator", field: "buyer",      headerStyle: headerCSS,  cellStyle: cellCSS,
+        { title: "Property Owner",    field: "owner",     headerStyle: headerCSS,  cellStyle: cellCSS,
           render: row => 
-            <Tooltip title={row.buyer} placement="bottom-end">
-                <div>{`${row.buyer.slice(0, -25)}....${row.buyer.slice(37, 42)}`}</div>
+            <Tooltip title={row.owner} placement="bottom-end">
+                <div>{`${row.owner.slice(0, -25)}....${row.owner.slice(37, 42)}`}</div>
             </Tooltip>, 
         },
         { title: "Property Details",  field: "ipfsHash",   headerStyle: headerCSS,  cellStyle: cellCSS,
@@ -29,6 +29,14 @@ function RequestedByMe({ account, contract, requests }) {
         { title: "Property Location", field: "location",   headerStyle: headerCSS,  cellStyle: cellCSS },
         { title: "Status",            headerStyle: headerCSS,  cellStyle: cellCSS,
           render: row => 
+            row.registrarApproved && !row.registrarRejected
+            ?
+            <div style={{color: 'green'}}>{`Property Sold to you.`}</div>
+            :
+            !row.registrarApproved && row.registrarRejected
+            ?
+            <div style={{color: 'red'}}>{`Registrar Declined your request.`}</div>
+            :
             row.ownerApproved && !row.ownerRejected
             ?
             <div style={{color: 'green'}}>{`Owner Approved your request.`}</div>

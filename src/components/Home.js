@@ -6,13 +6,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {Button} from 'react-bootstrap';
 import {headerCSS, cellCSS, landStatusString, SuccessAlert} from '../constants';
 
-function Home({ account, contract, properties, isRegistrar }) {
+function Home({ web3, account, contract, properties, isRegistrar }) {
 
-    const requestProp = (e, propId) => {
-        console.log("Requested");
-        console.log(propId);
-        contract.methods.sendRequest(propId)
-        .send({ from: account }, (error, transactionHash) => {
+    const requestProp = (e, row) => {
+        const price = web3.utils.toWei(row.cost.toString(), 'Ether')
+        contract.methods.sendRequest(row.propertyId)
+        .send({ from: account, value: price }, (error, transactionHash) => {
           if(transactionHash) {
             SuccessAlert("Request initiated..")
           }
@@ -46,11 +45,11 @@ function Home({ account, contract, properties, isRegistrar }) {
           render: row => 
           <div> 
             { 
-            (row.seller===account || row.status===0 || row.status===3 || isRegistrar)
+            (row.seller===account || row.status==="0" || row.status==="3" || isRegistrar)
             ? 
             <Button size="sm" variant="outline-secondary" disabled>Request</Button>
             :
-            <Button size="sm" variant="outline-info" onClick={e=>requestProp(e, row.propertyId)}>Request</Button> 
+            <Button size="sm" variant="outline-info" onClick={e=>requestProp(e, row)}>Request</Button> 
             }
           </div> 
         },

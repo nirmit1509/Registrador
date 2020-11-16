@@ -14,7 +14,7 @@ function Left( { web3, contract, networkId, account, isRegistrar } ) {
                     src = {logo} 
                     alt = "Secure Share Logo"
                 />
-                <h2>Secure Share</h2>
+                <h2>Registrador</h2>
             </div>
             <div className="left__middle">
                 <ul id="items">
@@ -38,7 +38,7 @@ function Left( { web3, contract, networkId, account, isRegistrar } ) {
                     src = {logo} 
                     alt = "Secure Share Logo"
                 />
-                <h2>Secure Share</h2>
+                <h2>Registrador</h2>
             </div>
             <div className="left__middle">
                 <ul id="items">            

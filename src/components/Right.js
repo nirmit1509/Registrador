@@ -19,6 +19,7 @@ function Right( { web3, contract, networkId, account, isRegistrar } ) {
                     networkId = {networkId}
                     contract = {contract}
                     isRegistrar = {isRegistrar}
+                    // contractAddress = {contractAddress}
                 />
             </div>
         </div>

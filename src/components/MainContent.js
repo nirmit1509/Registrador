@@ -8,7 +8,7 @@ import PendingRequests from './PendingRequests';
 import RequestedByMe from './RequestedByMe';
 import RegistrarRequests from './RegistrarRequests';
 
-function MainContent( { web3, contract, networkId, account, isRegistrar } ) {
+function MainContent( { web3, contract, account, isRegistrar } ) {
 
 
     const [loading, setLoading] = useState(true);
@@ -43,17 +43,19 @@ function MainContent( { web3, contract, networkId, account, isRegistrar } ) {
     return (
         !loading ?
         <div className="main__content">
-            <Router>
+            {
+                !isRegistrar
+                ?
+                <Router>
                 <Switch>
-                    <Route exact path="/" >
-                        <Redirect to="/home" />
-                    </Route>
                     <Route exact path="/home">
                         <Home 
+                            web3 = {web3}
                             account={account} 
                             contract={contract} 
                             properties={properties} 
                             isRegistrar={isRegistrar} 
+                            // contractAddress = {contractAddress}
                         /> 
                     </Route>
                     <Route exact path="/upload">
@@ -71,6 +73,7 @@ function MainContent( { web3, contract, networkId, account, isRegistrar } ) {
                     </Route>
                     <Route exact path="/pending-requests">
                         <PendingRequests 
+                            web3 = {web3}
                             account={account} 
                             contract={contract} 
                             requests={requests} 
@@ -83,15 +86,38 @@ function MainContent( { web3, contract, networkId, account, isRegistrar } ) {
                             requests={requests} 
                         />
                     </Route>
+                    <Route path="*" >
+                        <Redirect to="/home" />
+                    </Route>
+                </Switch>
+            </Router>
+            :
+            <Router>
+                <Switch>
+                    <Route exact path="/home">
+                        <Home 
+                            account={account} 
+                            contract={contract} 
+                            properties={properties} 
+                            isRegistrar={isRegistrar} 
+                        /> 
+                    </Route>
                     <Route exact path="/registrar-pending-requests">
                         <RegistrarRequests 
+                            web3 = {web3}
                             account={account} 
                             contract={contract} 
                             requests={requests} 
+                            // contractAddress = {contractAddress}
                         />
                     </Route>
+                    <Route path="*" >
+                        <Redirect to="/home" />
+                    </Route>
                 </Switch>
-            </Router>    
+            </Router>
+            }
+                
         </div>
         :
         <div className="loading__gif">

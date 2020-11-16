@@ -12,6 +12,7 @@ function App() {
     const [account, setAccount] = useState('');
     const [networkId, setNetworkId] = useState('');
     const [landTransferContract, setLandTransferContract] = useState(null);
+    // const [contractAddress, setContractAddress] = useState(null);
     const [isRegistrar, setIsRegistrar] = useState(false);
     
     async function establishConnection() {
@@ -23,8 +24,14 @@ function App() {
       setNetworkId(nwId);
       const networkData = LandTransferContract.networks[nwId];
 
+      window.ethereum.on('accountsChanged', function (accounts) {
+        setAccount(accounts[0]);
+        window.location.reload();
+      })
+
       if(networkData) {
-          const contract = new web.eth.Contract(LandTransferContract.abi, networkData.address)
+          const contract = new web.eth.Contract(LandTransferContract.abi, networkData.address);
+          // setContractAddress(contract._address)
           const registrar = await contract.methods.registrar().call()
           if(registrar===accounts[0]) {
             setIsRegistrar(true);
@@ -59,6 +66,7 @@ function App() {
             networkId = {networkId}
             contract = {landTransferContract}
             isRegistrar = {isRegistrar}
+            // contractAddress = {contractAddress}
         /> 
       </div>
     </div>

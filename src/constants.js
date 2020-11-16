@@ -10,7 +10,7 @@ export const SuccessAlert = (msg) => { store.addNotification({
     animationIn: ["animated", "fadeIn"],     // animate.css classes that's applied
     animationOut: ["animated", "fadeOut"],   // animate.css classes that's applied
     dismiss: {
-      duration: 1500
+      duration: 2000
     }
   })
 }
@@ -23,7 +23,7 @@ export const FailureAlert = (msg) => { store.addNotification({
   animationIn: ["animated", "fadeIn"],     // animate.css classes that's applied
   animationOut: ["animated", "fadeOut"],   // animate.css classes that's applied
   dismiss: {
-    duration: 1500
+    duration: 2000
   }
 })
 }

@@ -3,11 +3,7 @@ pragma solidity >=0.4.22 <0.8.0;
 
 contract LandTransfer {
 
-    address public registrar = 0x2E43b638d3Da60077EB5B0EC321C515Ba8606787;
-
-    // constructor (address _registrar) public {
-    //     registrar = _registrar;
-    // }
+    address payable public registrar = msg.sender;
 
     enum Status { notForSale, forSale, inProgress, sold }
 
@@ -18,7 +14,7 @@ contract LandTransfer {
         string ipfsHash;
         string phone;
         string location;
-        address seller;
+        address payable seller;
         uint cost;
         Status status;
     }
@@ -33,7 +29,7 @@ contract LandTransfer {
         properties[propertyCount] = propertyDetail(propertyCount, _hash, _phone, _location, msg.sender, _cost, Status.forSale);
     }
 
-    function changeOwnership(uint _propId, address _newOwner) internal {
+    function changeOwnership(uint _propId, address payable _newOwner) internal {
         propertyDetail storage p = properties[_propId];
         require(p.status!=Status.sold, "Land is already sold to another buyer.");
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
@@ -47,8 +43,8 @@ contract LandTransfer {
     struct purchaseRequest {
         uint requestId;
         uint propertyId;
-        address owner;
-        address buyer;
+        address payable owner;
+        address payable buyer;
         string location;
         uint cost;
         string ipfsHash;
@@ -60,46 +56,47 @@ contract LandTransfer {
 
     mapping(uint => purchaseRequest) public requests;
 
-    function sendRequest (uint _propId) public {
+    function sendRequest (uint _propId) public payable {
         propertyDetail storage p = properties[_propId];
         require(p.seller!=msg.sender, "Land Owner cannot request purchase for his own land.");
         require(p.status!=Status.sold, "Land is already sold to another buyer.");
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
+        (p.seller).transfer(msg.value);
         requestCount ++;
         requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, p.location, p.cost, p.ipfsHash, false, false, false, false);
         p.status = Status.inProgress;
     }
 
-    function ownerApproval (uint _requestId) public {
+    function ownerApproval (uint _requestId) public payable {
         purchaseRequest storage r = requests[_requestId];
         require(msg.sender==r.owner, "You are not the owner of the land requested");
         r.ownerApproved = true;
+        registrar.transfer(msg.value);
         //send notification to Land Registrar
     }
 
-    function ownerRejection (uint _requestId) public {
+    function ownerRejection (uint _requestId) public payable {
         purchaseRequest storage r = requests[_requestId];
         require(msg.sender==r.owner, "You are not the owner of the land requested");
         r.ownerRejected = true;
+        (r.buyer).transfer(msg.value);
         //send notification to Requester
     }
 
-    function registrarApproval (uint _requestId) public {
+    function registrarApproval (uint _requestId) public payable {
         purchaseRequest storage r = requests[_requestId];
         require(r.ownerRejected==false, "Owner unwilling to sell his land to this requester.");
         require(r.ownerApproved==true, "Owner unwilling to sell his land to this requester.");
-        // Check whether msg.sender is the land registrar
-        // require(msg.sender==r.owner, "You are not the owner of the land requested");
         r.registrarApproved = true;
+        (r.owner).transfer(msg.value);
         //change the ownership of land function call
         changeOwnership(r.propertyId, r.buyer);
     }
 
-    function registrarRejection (uint _requestId) public {
+    function registrarRejection (uint _requestId) public payable {
         purchaseRequest storage r = requests[_requestId];
-        // Check whether msg.sender is the land registrar
-        // require(msg.sender==r.owner, "You are not the owner of the land requested");
         r.registrarRejected = true;
+        (r.buyer).transfer(msg.value);
         //send notification to Requester
     }
     
