@@ -29,11 +29,13 @@ contract LandTransfer {
         properties[propertyCount] = propertyDetail(propertyCount, _hash, _phone, _location, msg.sender, _cost, Status.forSale);
     }
 
-    function changeOwnership(uint _propId, address payable _newOwner) internal {
+    function changeOwnership(uint _propId, address payable _newOwner, uint _requestId) internal {
         propertyDetail storage p = properties[_propId];
+        purchaseRequest storage r = requests[_requestId];
         require(p.status!=Status.sold, "Land is already sold to another buyer.");
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
         p.seller = _newOwner;
+        r.owner = _newOwner;
         p.status = Status.notForSale;
         p.phone = "";
     }
@@ -90,7 +92,7 @@ contract LandTransfer {
         r.registrarApproved = true;
         (r.owner).transfer(msg.value);
         //change the ownership of land function call
-        changeOwnership(r.propertyId, r.buyer);
+        changeOwnership(r.propertyId, r.buyer, _requestId);
     }
 
     function registrarRejection (uint _requestId) public payable {

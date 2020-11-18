@@ -21,6 +21,7 @@ function RegistrarRequests({ web3, account, contract, requests }) {
     }
 
     const rejectByRegistrar = (e, row) => {
+      console.log(row)
         const price = web3.utils.toWei(row.cost.toString(), 'Ether')
         contract.methods.registrarRejection(row.requestId)
         .send({ from: account, value: price }, (error, transactionHash) => {
@@ -80,7 +81,7 @@ function RegistrarRequests({ web3, account, contract, requests }) {
               { 
               (!(row.registrarRejected || row.registrarApproved))
               ? 
-              <Button size="sm" variant="outline-danger" onClick={e=>rejectByRegistrar(e, row.requestId)}>Reject</Button> 
+              <Button size="sm" variant="outline-danger" onClick={e=>rejectByRegistrar(e, row)}>Reject</Button> 
               :
               <Button size="sm" variant="outline-secondary" disabled>Reject</Button> 
               }
