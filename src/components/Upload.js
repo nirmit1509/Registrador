@@ -4,7 +4,6 @@ import '../css/Upload.css';
 import ipfs from '../ipfs';
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField, Button} from '@material-ui/core';
-import RootRef from '@material-ui/core/RootRef'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { SuccessAlert } from '../constants';
 
@@ -21,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
             width: '65vw'
         },
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 }));
 
 function Upload( { account, contract }) {
@@ -52,7 +52,7 @@ function Upload( { account, contract }) {
     }, []);
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-    const {ref, ...rootProps} = getRootProps()
+    // const {ref, ...rootProps} = getRootProps()
 
     const baseStyle = {
         flex: 1,
@@ -81,9 +81,12 @@ function Upload( { account, contract }) {
     const style = useMemo(() => ({
         ...baseStyle,
         ...(isDragActive ? activeStyle : {}),
-      }), [
+      }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [
         isDragActive,
-      ]);
+      ]   
+    );
 
     const uploadDetails = (e) => {
         e.preventDefault();
@@ -130,6 +133,7 @@ function Upload( { account, contract }) {
                         <img 
                             src="https://i.gifer.com/KDVh.gif"     
                             height='150vh'
+                            alt="logo..." 
                         />
                     </div>
                     :
@@ -138,7 +142,11 @@ function Upload( { account, contract }) {
                         {
                             isDragActive ?
                             <p>Drop the files here ...</p> :
-                            <p>{`Drag & drop file here, or click to select file`}</p>
+                            <div style={{display:'flex', flexDirection:'column', placeItems:'center'}}>
+                                <p>{`Drag & drop file here, or click`}</p>
+                                <CloudUploadIcon />
+                            </div>
+                            
                         }
                     </div>
                 }

@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: MIT
+
+//commit 90b97dfe35397f16b9e60b06379def8dcbb0008f
+
 pragma solidity >=0.4.22 <0.8.0;
 
 contract LandTransfer {
@@ -38,6 +41,7 @@ contract LandTransfer {
         r.owner = _newOwner;
         p.status = Status.notForSale;
         p.phone = "";
+        r.sold = true;
     }
 
     uint public requestCount = 0;
@@ -54,6 +58,7 @@ contract LandTransfer {
         bool registrarApproved;
         bool ownerRejected;
         bool registrarRejected;
+        bool sold;
     }
 
     mapping(uint => purchaseRequest) public requests;
@@ -65,7 +70,7 @@ contract LandTransfer {
         require(p.status!=Status.notForSale, "This land is no longer available for purchase");
         (p.seller).transfer(msg.value);
         requestCount ++;
-        requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, p.location, p.cost, p.ipfsHash, false, false, false, false);
+        requests[requestCount] = purchaseRequest(requestCount, _propId, p.seller, msg.sender, p.location, p.cost, p.ipfsHash, false, false, false, false, false);
         p.status = Status.inProgress;
     }
 

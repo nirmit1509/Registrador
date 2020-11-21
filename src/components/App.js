@@ -45,6 +45,7 @@ function App() {
 
   useEffect(() => {
       establishConnection();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);  
 
   return (
@@ -73,7 +74,8 @@ function App() {
     :
     <div className="app__loading__gif">
         <img 
-          src="https://i.gifer.com/KDVh.gif"     
+          src="https://i.gifer.com/KDVh.gif"  
+          alt="logo..."    
         />
     </div>
   );

@@ -52,6 +52,10 @@ function PendingRequests({ web3, account, contract, requests }) {
         { title: "Property Location", field: "location",   headerStyle: headerCSS,  cellStyle: cellCSS },
         { title: "Status",            headerStyle: headerCSS,  cellStyle: cellCSS,
           render: row => 
+            row.sold
+            ?
+            <div style={{color: 'green'}}>{`Sold to you.`}</div>
+            :
             row.ownerApproved && !row.ownerRejected
             ?
             <div style={{color: 'green'}}>{`Approved by you.`}</div>
@@ -90,7 +94,7 @@ function PendingRequests({ web3, account, contract, requests }) {
 
     let data = []
     const fetchData = () => {
-        requests.map((req, key) => {
+        requests.forEach((req) => {
             if(req.owner===account)
                 data.push(req)
         })

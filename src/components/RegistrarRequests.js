@@ -91,7 +91,7 @@ function RegistrarRequests({ web3, account, contract, requests }) {
 
     let data = []
     const fetchData = () => {
-        requests.map((req, key) => {
+        requests.forEach((req, key) => {
             if(req.ownerApproved)
                 data.push(req)
         })

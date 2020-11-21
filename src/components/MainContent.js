@@ -37,6 +37,7 @@ function MainContent( { web3, contract, account, isRegistrar } ) {
 
     useEffect(() => {
         fetchDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     
@@ -122,7 +123,8 @@ function MainContent( { web3, contract, account, isRegistrar } ) {
         :
         <div className="loading__gif">
             <img 
-                src="https://i.gifer.com/KDVh.gif"     
+                src="https://i.gifer.com/KDVh.gif"   
+                alt="logo..."  
             />
         </div>
     )

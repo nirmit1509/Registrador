@@ -3,7 +3,7 @@ import '../css/Home.css';
 import MaterialTable from 'material-table';
 import Tooltip from '@material-ui/core/Tooltip';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import {headerCSS, cellCSS, SuccessAlert, FailureAlert} from '../constants';
+import {headerCSS, cellCSS} from '../constants';
 
 
 function RequestedByMe({ account, contract, requests }) {
@@ -51,7 +51,7 @@ function RequestedByMe({ account, contract, requests }) {
 
     let data = []
     const fetchData = () => {
-        requests.map((req, key) => {
+        requests.forEach((req) => {
             if(req.buyer===account)
                 data.push(req)
         })

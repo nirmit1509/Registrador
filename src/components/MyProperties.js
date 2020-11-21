@@ -34,7 +34,7 @@ function MyProperties({ account, contract, properties }) {
 
     let data = []
     const fetchData = () => {
-        properties.map((property, key) => {
+        properties.forEach((property, key) => {
             if(property.seller === account) {
                 data.push(property)
             }
